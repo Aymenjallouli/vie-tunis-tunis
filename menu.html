@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menu — Vie Tunis · Restaurant &amp; Lounge</title>
+  <meta name="description" content="Découvrez le menu complet de Vie Tunis à Tunis : entrées, plats tunisiens, grillades, desserts et boissons. Ouvert tous les jours de 11h à 2h." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cabin:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #09050300;
+      --surface:   #140c06;
+      --surface2:  #1e1209;
+      --brand:     #c4603a;
+      --accent:    #e8a84c;
+      --accent2:   #f0c87a;
+      --text:      #f0e6d6;
+      --muted:     #8a7560;
+      --border:    rgba(196,96,58,.18);
+      --font-head: 'Cinzel', serif;
+      --font-body: 'Cabin', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--surface);
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(14, 8, 4, .82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-head);
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 700;
+      letter-spacing: .18em;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--text); opacity: .55; font-weight: 400; }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: .82rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      opacity: .75;
+      transition: opacity .2s, color .2s;
+    }
+    .nav-links a:hover, .nav-links a[aria-current] { opacity: 1; color: var(--accent); }
+    .nav-cta {
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .55rem 1.4rem;
+      border: 1px solid var(--brand);
+      color: var(--brand);
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background .2s, color .2s;
+    }
+    .nav-cta:hover { background: var(--brand); color: #fff; }
+    .burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .burger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(9,5,3,.97);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.4rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--font-head);
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+      letter-spacing: .1em;
+      color: var(--text);
+      text-decoration: none;
+      opacity: .85;
+      transition: color .2s;
+    }
+    .mobile-menu a:hover { color: var(--accent); }
+
+    /* ── PAGE HERO ───────────────────────────────────── */
+    .page-hero {
+      position: relative;
+      padding: 10rem 1.5rem 5rem;
+      text-align: center;
+      background: var(--surface2);
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 100%, rgba(196,96,58,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-hero-eyebrow {
+      font-size: .72rem;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin-bottom: 1rem;
+      display: block;
+      opacity: 0;
+      animation: fadeUp .8s .2s forwards;
+    }
+    .page-hero-title {
+      font-family: var(--font-head);
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 900;
+      letter-spacing: .06em;
+      line-height: 1;
+      color: var(--text);
+      margin-bottom: .8rem;
+      opacity: 0;
+      animation: fadeUp .9s .35s forwards;
+    }
+    .page-hero-sub {
+      font-size: clamp(.9rem, 2vw, 1.1rem);
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto;
+      opacity: 0;
+      animation: fadeUp .9s .5s forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ── MENU TABS ───────────────────────────────────── */
+    .menu-nav {
+      position: sticky;
+      top: 60px;
+      z-index: 50;
+      background: rgba(14, 8, 4, .9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .menu-tabs {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 0 1.5rem;
+    }
+    .menu-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex-shrink: 0;
+      padding: 1rem 1.4rem;
+      font-family: var(--font-body);
+      font-size: .78rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: color .2s, border-color .2s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── MENU BODY ───────────────────────────────────── */
+    .menu-body {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 6rem;
+    }
+
+    .menu-section {
+      margin-bottom: 5rem;
+      scroll-margin-top: 130px;
+    }
+    .menu-section-header {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .menu-section-icon {
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .menu-section-icon svg { width: 22px; height: 22px; }
+    .menu-section-num {
+      font-family: var(--font-head);
+      font-size: .75rem;
+      letter-spacing: .25em;
+      color: var(--brand);
+      display: block;
+      margin-bottom: .2rem;
+    }
+    .menu-section-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+    }
+    .menu-item {
+      background: var(--surface2);
+      padding: 1.6rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+      position: relative;
+      transition: background .25s;
+    }
+    .menu-item:hover { background: #231408; }
+    .menu-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--brand);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform .3s;
+    }
+    .menu-item:hover::before { transform: scaleY(1); }
+    .item-name {
+      font-family: var(--font-head);
+      font-size: .98rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      color: var(--text);
+    }
+    .item-desc {
+      font-size: .85rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .item-tag {
+      display: inline-block;
+      font-size: .65rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(232,168,76,.3);
+      border-radius: 2px;
+      padding: .15rem .5rem;
+      margin-top: .3rem;
+      align-self: flex-start;
+    }
+
+    /* ── WAVE ────────────────────────────────────────── */
+    .wave-top { display: block; width: 100%; overflow: hidden; line-height: 0; }
+    .wave-top svg { display: block; width: 100%; }
+
+    /* ── BOTTOM CTA ──────────────────────────────────── */
+    .bottom-cta {
+      background: var(--surface2);
+      text-align: center;
+      padding: 5rem 1.5rem;
+    }
+    .bottom-cta-label {
+      font-size: .72rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin-bottom: .9rem;
+      display: block;
+    }
+    .bottom-cta h2 {
+      font-family: var(--font-head);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+    .bottom-cta p { font-size: .95rem; color: var(--muted); margin-bottom: 2.2rem; }
+    .cta-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-block;
+      padding: .85rem 2.4rem;
+      background: var(--brand);
+      color: #fff;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background .25s, transform .2s;
+    }
+    .btn-primary:hover { background: #d4703e; transform: translateY(-2px); }
+    .btn-outline {
+      display: inline-block;
+      padding: .85rem 2.4rem;
+      border: 1px solid rgba(240,230,214,.25);
+      color: var(--text);
+      font-size: .82rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: #060302;
+      border-top: 1px solid var(--border);
+      padding: 3rem 1.5rem;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: var(--font-head);
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: .18em;
+      color: var(--accent);
+    }
+    .footer-logo span { color: var(--muted); font-weight: 400; }
+    .footer-copy { font-size: .78rem; color: var(--muted); text-align: center; }
+    .footer-hours { font-size: .8rem; color: var(--muted); text-align: right; }
+    .footer-hours strong { color: var(--text); }
+
+    /* ── FLOATING CTA ────────────────────────────────── */
+    .floating-cta {
+      position: fixed;
+      bottom: 1.8rem;
+      right: 1.8rem;
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      gap: .7rem;
+    }
+    .fab {
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      padding: .75rem 1.2rem;
+      border-radius: 2px;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-decoration: none;
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(0,0,0,.45);
+      transition: transform .2s, box-shadow .2s;
+      min-height: 44px;
+    }
+    .fab:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,.55); }
+    .fab-call { background: var(--brand); }
+    .fab-wa { background: #1a7a44; }
+    .fab svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* ── REVEAL ──────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 900px) {
+      .nav-links, .nav-cta { display: none; }
+      .burger { display: flex; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .footer-hours { text-align: left; }
+    }
+    @media (max-width: 600px) {
+      .menu-body { padding: 3rem 1rem 5rem; }
+      .menu-section-header { flex-direction: column; align-items: flex-start; gap: .8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" aria-label="Navigation principale">
+  <a class="nav-logo" href="./index.html">VIE <span>TUNIS</span></a>
+  <ul class="nav-links" role="list">
+    <li><a href="./index.html#apropos">À Propos</a></li>
+    <li><a href="./menu.html" aria-current="page">Menu</a></li>
+    <li><a href="./index.html#contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="tel:+21698157400">Réserver</a>
+  <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Menu mobile">
+  <a href="./index.html#apropos" class="mm-link">À Propos</a>
+  <a href="./menu.html" class="mm-link">Menu</a>
+  <a href="./index.html#contact" class="mm-link">Contact</a>
+  <a href="tel:+21698157400" class="mm-link" style="color:var(--accent)">Réserver</a>
+</div>
+
+<!-- PAGE HERO -->
+<header class="page-hero">
+  <span class="page-hero-eyebrow">Vie Tunis · Restaurant &amp; Lounge</span>
+  <h1 class="page-hero-title">Notre Carte</h1>
+  <p class="page-hero-sub">Des saveurs authentiques, des produits frais, une cuisine qui célèbre la Tunisie à chaque assiette.</p>
+</header>
+
+<!-- MENU TABS NAV -->
+<nav class="menu-nav" aria-label="Catégories du menu">
+  <div class="menu-tabs" role="tablist">
+    <button class="tab-btn active" data-target="entrees" role="tab" aria-selected="true">Entrées</button>
+    <button class="tab-btn" data-target="salades" role="tab" aria-selected="false">Salades</button>
+    <button class="tab-btn" data-target="plats" role="tab" aria-selected="false">Plats Principaux</button>
+    <button class="tab-btn" data-target="grillades" role="tab" aria-selected="false">Grillades</button>
+    <button class="tab-btn" data-target="pates-pizzas" role="tab" aria-selected="false">Pâtes &amp; Pizzas</button>
+    <button class="tab-btn" data-target="sandwichs" role="tab" aria-selected="false">Sandwichs</button>
+    <button class="tab-btn" data-target="desserts" role="tab" aria-selected="false">Desserts</button>
+    <button class="tab-btn" data-target="boissons" role="tab" aria-selected="false">Boissons</button>
+  </div>
+</nav>
+
+<!-- MENU CONTENT -->
+<main class="menu-body" id="menuBody">
+
+  <!-- ENTRÉES -->
+  <section class="menu-section reveal" id="entrees" aria-labelledby="entrees-title">
+    <div class="menu-section-header">
+      <div class="menu-section-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div>
+        <span class="menu-section-num">01</span>
+        <h2 class="menu-section-title" id="entrees-title">Entrées</h2>
+      </div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item">
+        <span class="item-name">Brik à l'œuf</span>
+        <span class="item-desc">Feuille de brick croustillante, œuf coulant, thon, câpres et persil frais.</span>
+        <span class="item-tag">Signature</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Salade méchouia</span>
+        <span class="item-desc">Poivrons et tomates grillés, ail, huile d'olive extra-vierge, harissa maison.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Omek houria</span>
+        <span class="item-desc">Purée de carottes épicée, cumin, harissa douce, olives noires.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Fricassé tunisien</span>
+        <span class="item-desc">Petit pain frit garni de thon, œuf dur, câpres, olives et pommes de terre.</span>
+        <span class="item-tag">Populaire</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Chorba frik</span>
+        <span class="item-desc">Soupe traditionnelle au blé vert concassé, agneau et coriandre fraîche.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Assortiment d'entrées</span>
+        <span class="item-desc">Sélection de trois entrées froides au choix de la maison.</span>
+        <span class="item-tag">Pour 2</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SALADES -->
+  <section class="menu-section reveal" id="salades" aria-labelledby="salades-title">
+    <div class="menu-section-header">
+      <div class="menu-section-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+      </div>
+      <div>
+        <span class="menu-section-num">02</span>
+        <h2 class="menu-section-title" id="salades-title">Salades</h2>
+      </div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item">
+        <span class="item-name">Salade tunisienne</span>
+        <span class="item-desc">Tomates, concombre, oignons, poivron vert, olives, menthe et huile d'olive.</span>
+        <span class="item-tag">Végétarien</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Salade César</span>
+        <span class="item-desc">Laitue romaine, poulet grillé, parmesan, croûtons et sauce César maison.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Salade méditerranéenne</span>
+        <span class="item-desc">Roquette, tomates cerises, feta, olives Kalamata et vinaigrette au citron.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Salade de thon</span>
+        <span class="item-desc">Thon, haricots blancs, œuf, anchois, tomate et oignon rouge.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATS PRINCIPAUX -->
+  <section class="menu-section reveal" id="plats" aria-labelledby="plats-title">
+    <div class="menu-section-header">
+      <div class="menu-section-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+      </div>
+      <div>
+        <span class="menu-section-num">03</span>
+        <h2 class="menu-section-title" id="plats-title">Plats Principaux</h2>
+      </div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item">
+        <span class="item-name">Couscous de l'agneau</span>
+        <span class="item-desc">Semoule fine, agneau mijoté, légumes de saison et bouillon parfumé.</span>
+        <span class="item-tag">Spécialité</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Tajine tunisien</span>
+        <span class="item-desc">Omelette gratinée au four, viande hachée, fromage et aromates.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Lablabi</span>
+        <span class="item-desc">Soupe de pois chiches épicée, ail, cumin, citron et pain rassis. Un classique.</span>
+        <span class="item-tag">Signature</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Kefta sauce tomate</span>
+        <span class="item-desc">Boulettes de viande hachée épicée, mijotées dans une sauce tomate maison.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Poulet rôti</span>
+        <span class="item-desc">Demi-poulet mariné aux épices tunisiennes, servi avec pommes de terre et salade.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Poisson du jour</span>
+        <span class="item-desc">Sélection selon arrivage, préparé à la plancha ou en sauce selon le poisson.</span>
+        <span class="item-tag">Saison</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRILLADES -->
+  <section class="menu-section reveal" id="grillades" aria-labelledby="grillades-title">
+    <div class="menu-section-header">
+      <div class="menu-section-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      </div>
+      <div>
+        <span class="menu-section-num">04</span>
+        <h2 class="menu-section-title" id="grillades-title">Grillades</h2>
+      </div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item">
+        <span class="item-name">Entrecôte grillée</span>
+        <span class="item-desc">Bœuf choix grillé à la flamme, servie avec frites maison et sauce poivre.</span>
+        <span class="item-tag">Populaire</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Brochettes d'agneau</span>
+        <span class="item-desc">Cubes d'agneau marinés au cumin et coriandre, grillés sur charbon de bois.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Poulet grillé entier</span>
+        <span class="item-desc">Poulet mariné 24h aux épices et citron, cuit lentement sur la braise.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Merguez maison</span>
+        <span class="item-desc">Saucisses fraîches épicées, faites sur place, servies avec pain et sauce harissa.</span>
+        <span class="item-tag">Maison</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Plateaux mixte grillade</span>
+        <span class="item-desc">Sélection de brochettes, merguez et côtelettes, accompagnements au choix.</span>
+        <span class="item-tag">Pour 2</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Crevettes grillées</span>
+        <span class="item-desc">Grosses crevettes à l'ail et herbes fraîches, servies avec riz et salade verte.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PÂTES & PIZZAS -->
+  <section class="menu-section reveal" id="pates-pizzas" aria-labelledby="pates-title">
+    <div class="menu-section-header">
+      <div class="menu-section-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div>
+        <span class="menu-section-num">05</span>
+        <h2 class="menu-section-title" id="pates-title">Pâtes &amp; Pizzas</h2>
+      </div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item">
+        <span class="item-name">Pasta arrabiata</span>
+        <span class="item-desc">Penne, sauce tomate épicée, ail, piment, parmesan et basilic frais.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Pasta poulet crème</span>
+        <span class="item-desc">Pâtes fraîches, crème, poulet grillé, champignons et herbes aromatiques.</span>
+        <span class="item-tag">Populaire</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Pizza Margherita</span>
+        <span class="item-desc">Base tomate maison, mozzarella di bufala, basilic frais, huile d'olive.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Pizza Vie Tunis</span>
+        <span class="item-desc">Sauce harissa, poulet épicé, poivrons grillés, olives et fromage fondu.</span>
+        <span class="item-tag">Signature</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Pizza mixte</span>
+        <span class="item-desc">Viande hachée, merguez, poivrons, oignons et fromage sur base tomate.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Lasagne maison</span>
+        <span class="item-desc">Feuilletage de pâtes, bœuf haché, béchamel crémeuse et parmesan gratiné.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SANDWICHS -->
+  <section class="menu-section reveal" id="sandwichs" aria-labelledby="sandwichs-title">
+    <div class="menu-section-header">
+      <div class="menu-section-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </div>
+      <div>
+        <span class="menu-section-num">06</span>
+        <h2 class="menu-section-title" id="sandwichs-title">Sandwichs</h2>
+      </div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item">
+        <span class="item-name">Casse-croûte tunisien</span>
+        <span class="item-desc">Pain baguette croustillant, thon, harissa, œuf, câpres et olives. L'incontournable.</span>
+        <span class="item-tag">Signature</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Burger maison</span>
+        <span class="item-desc">Steak haché 180g, cheddar fondu, laitue, tomate, oignon rouge et sauce maison.</span>
+        <span class="item-tag">Populaire</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Sandwich merguez grillée</span>
+        <span class="item-desc">Baguette, merguez maison, frites, harissa et salade fraîche.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Wrap poulet grillé</span>
+        <span class="item-desc">Tortilla, poulet grillé, crudités, sauce yaourt-menthe et fromage.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESSERTS -->
+  <section class="menu-section reveal" id="desserts" aria-labelledby="desserts-title">
+    <div class="menu-section-header">
+      <div class="menu-section-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+      </div>
+      <div>
+        <span class="menu-section-num">07</span>
+        <h2 class="menu-section-title" id="desserts-title">Desserts</h2>
+      </div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item">
+        <span class="item-name">Baklawa maison</span>
+        <span class="item-desc">Pâtisserie feuilletée aux noix et pistaches, sirop de fleur d'oranger.</span>
+        <span class="item-tag">Maison</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Assida zgougou</span>
+        <span class="item-desc">Crème aux graines de pin, lait, eau de rose — dessert de fête tunisien.</span>
+        <span class="item-tag">Traditionnel</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Crème caramel</span>
+        <span class="item-desc">Flan onctueux au caramel ambré, préparé chaque jour en cuisine.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Glace artisanale</span>
+        <span class="item-desc">Deux boules au choix : vanille, pistache, citron ou fruits rouges.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Makroudh</span>
+        <span class="item-desc">Gâteau de semoule farci aux dattes et noix, frit et enrobé de miel.</span>
+        <span class="item-tag">Signature</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Fondant au chocolat</span>
+        <span class="item-desc">Cœur coulant chaud, servi avec glace vanille et coulis de fruits rouges.</span>
+        <span class="item-tag">Populaire</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOISSONS -->
+  <section class="menu-section reveal" id="boissons" aria-labelledby="boissons-title">
+    <div class="menu-section-header">
+      <div class="menu-section-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 010 8h-1M3 8h14v9a4 4 0 01-4 4H7a4 4 0 01-4-4V8z"/></svg>
+      </div>
+      <div>
+        <span class="menu-section-num">08</span>
+        <h2 class="menu-section-title" id="boissons-title">Boissons</h2>
+      </div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item">
+        <span class="item-name">Thé à la menthe</span>
+        <span class="item-desc">Thé vert Gunpowder, menthe fraîche et pignons de pin. Tradition tunisienne.</span>
+        <span class="item-tag">Signature</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Café turc</span>
+        <span class="item-desc">Café fort préparé à la cezve, servi avec un verre d'eau froide.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Jus de grenade frais</span>
+        <span class="item-desc">Grenades pressées à la minute, légèrement sucrées, servies glacées.</span>
+        <span class="item-tag">Pressé</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Jus d'orange pressé</span>
+        <span class="item-desc">Oranges locales pressées à la commande. Pur jus, aucun additif.</span>
+        <span class="item-tag">Pressé</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Smoothie fruits tropicaux</span>
+        <span class="item-desc">Mangue, ananas, banane, lait de coco et jus de citron vert.</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Limonade maison</span>
+        <span class="item-desc">Citrons, sucre de canne, eau pétillante, feuilles de menthe fraîche.</span>
+        <span class="item-tag">Maison</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Milk-shake</span>
+        <span class="item-desc">Choix de parfum : fraise, chocolat, caramel ou vanille. Épais et crémeux.</span>
+        <span class="item-tag">Populaire</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-name">Boissons froides</span>
+        <span class="item-desc">Eau minérale, eau gazeuse, sodas, et boissons énergisantes disponibles toute la journée.</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- BOTTOM CTA -->
+<div class="wave-top" aria-hidden="true" style="background:var(--surface)">
+  <svg viewBox="0 0 1440 56" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0 14 Q360 56 720 28 Q1080 0 1440 42 L1440 56 L0 56 Z" fill="#1e1209"/>
+  </svg>
+</div>
+<section class="bottom-cta">
+  <span class="bottom-cta-label">Réservez votre table</span>
+  <h2>Rejoignez-nous ce soir</h2>
+  <p>Ouvert 7j/7 de 11h à 2h. Appelez-nous ou écrivez sur WhatsApp pour réserver.</p>
+  <div class="cta-group">
+    <a href="tel:+21698157400" class="btn-primary">Appeler</a>
+    <a href="https://wa.me/21698157400" class="btn-outline" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">VIE <span>TUNIS</span></div>
+    <p class="footer-copy">© 2025 Vie Tunis · Restaurant &amp; Lounge · Tunis, Tunisie</p>
+    <p class="footer-hours">Ouvert <strong>7j/7</strong><br />11:00 — 02:00</p>
+  </div>
+</footer>
+
+<!-- FLOATING CTA -->
+<div class="floating-cta" aria-label="Actions rapides">
+  <a href="tel:+21698157400" class="fab fab-call" aria-label="Appeler Vie Tunis">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.37a16 16 0 006.72 6.72l1.74-1.74a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+    Appeler
+  </a>
+  <a href="https://wa.me/21698157400" class="fab fab-wa" target="_blank" rel="noopener" aria-label="WhatsApp Vie Tunis">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    WhatsApp
+  </a>
+</div>
+
+<script>
+  // BURGER
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => {
+    const open = burger.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open);
+    mobileMenu.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  document.querySelectorAll('.mm-link').forEach(link => {
+    link.addEventListener('click', () => {
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', false);
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // TAB scroll
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      const target = document.getElementById(btn.dataset.target);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Active tab on scroll
+  const sections = document.querySelectorAll('.menu-section');
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        tabBtns.forEach(b => {
+          const isMatch = b.dataset.target === id;
+          b.classList.toggle('active', isMatch);
+          b.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+          if (isMatch) {
+            b.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-120px 0px -50% 0px', threshold: 0 });
+  sections.forEach(s => sectionObserver.observe(s));
+
+  // REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  reveals.forEach(el => revealObserver.observe(el));
+</script>
+</body>
+</html>
